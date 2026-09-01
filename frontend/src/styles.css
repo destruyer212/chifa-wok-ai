@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { @apply bg-background text-on-background font-body-md antialiased; margin: 0; }
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.pulse-animation { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(7, 112, 204, 0.7); }
+  70%  { box-shadow: 0 0 0 15px rgba(7, 112, 204, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(7, 112, 204, 0); }
+}

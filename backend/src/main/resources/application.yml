@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: chifawok-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/chifawok}
+    username: ${SPRING_DATASOURCE_USERNAME:chifawok}
+    password: ${SPRING_DATASOURCE_PASSWORD:chifawok}
+  jpa:
+    hibernate:
+      ddl-auto: none          # el esquema lo gobierna Flyway (db/migration). Usa 'validate' para verificar el mapeo.
+    open-in-view: false
+    properties:
+      hibernate.format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: ${BACKEND_PORT:8080}
+  servlet:
+    context-path: /
+
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:clave-de-desarrollo-cambiala-en-produccion-32+chars}
+    expiration-minutes: ${APP_JWT_EXPIRATION_MINUTES:120}
+  cors:
+    allowed-origins: ${APP_CORS_ORIGINS:http://localhost:4200}
+  ai:
+    base-url: ${APP_AI_BASE_URL:http://localhost:8001}
+    timeout-seconds: 20
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    pe.edu.utp.chifawok: DEBUG

@@ -1,0 +1,9 @@
+[project]
+name = "chifawok-ai-service"
+version = "0.1.0"
+description = "Microservicio de lenguaje natural del asistente de voz del Chifa Wok"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

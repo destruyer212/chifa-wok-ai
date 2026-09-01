@@ -1,0 +1,60 @@
+services:
+
+  db:
+    image: postgres:16-alpine
+    container_name: chifawok-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-chifawok}
+      POSTGRES_USER: ${POSTGRES_USER:-chifawok}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chifawok}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - ./.docker-data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-chifawok}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ai-service:
+    build: ./ai-service
+    container_name: chifawok-ai
+    environment:
+      AI_SERVICE_PORT: 8001
+      LLM_PROVIDER: ${LLM_PROVIDER:-fake}
+      LLM_MODEL: ${LLM_MODEL:-gpt-4o-mini}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "${AI_SERVICE_PORT:-8001}:8001"
+
+  backend:
+    build: ./backend
+    container_name: chifawok-backend
+    depends_on:
+      db:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-chifawok}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-chifawok}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-chifawok}
+      APP_JWT_SECRET: ${JWT_SECRET:-cambia-esta-clave-por-una-de-al-menos-32-caracteres}
+      APP_JWT_EXPIRATION_MINUTES: ${JWT_EXPIRATION_MINUTES:-120}
+      APP_AI_BASE_URL: ${AI_SERVICE_BASE_URL:-http://ai-service:8001}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        API_BASE_URL: ${API_BASE_URL:-http://localhost:8080/api}
+    container_name: chifawok-frontend
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-4200}:80"
