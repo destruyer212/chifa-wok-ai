@@ -30,9 +30,12 @@ const IMG_FALLBACK =
       </button>
     </div>
 
-    <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-md">
-      {{ filtro() ?? 'Menu Completo' }}
+    <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
+      {{ filtro() ?? 'Menu Especial' }}
     </h2>
+    <p class="font-body-md text-body-md text-on-surface-variant mb-md">
+      {{ filtro() ? 'Platos de la categoria ' + filtro() : 'Toda nuestra carta, lista para pedir por voz o al toque' }}
+    </p>
 
     <p *ngIf="cargando()" class="font-body-md text-on-surface-variant">Cargando la carta...</p>
 
