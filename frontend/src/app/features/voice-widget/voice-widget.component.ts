@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SpeechService } from './speech.service';
+import { VoiceWidgetState } from './voice-widget.state';
 import { VoiceApiService } from '../../core/voice-api.service';
 import { ItemSugerido } from '../../core/models';
 
@@ -11,18 +12,16 @@ interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
   standalone: true,
   imports: [CommonModule],
   template: `
-    <!-- Boton flotante -->
     <button
-      *ngIf="!abierto()"
-      (click)="abrir()"
+      *ngIf="!estado.abierto()"
+      (click)="estado.abrir()"
       class="fixed bottom-lg right-lg w-16 h-16 bg-tertiary-container rounded-full shadow-lg
              flex items-center justify-center hover:scale-105 transition-transform z-50 pulse-animation group"
       aria-label="Abrir asistente de voz">
-      <span class="material-symbols-outlined text-on-tertiary text-[28px]">mic</span>
+      <span class="material-symbols-outlined text-on-tertiary text-[28px] group-hover:scale-110 transition-transform">mic</span>
     </button>
 
-    <!-- Panel -->
-    <div *ngIf="abierto()"
+    <div *ngIf="estado.abierto()"
          class="fixed bottom-lg right-lg z-50 w-[92vw] max-w-sm glass-effect rounded-2xl
                 shadow-xl border border-outline-variant flex flex-col overflow-hidden">
       <header class="flex items-center justify-between px-md py-sm bg-primary text-on-primary">
@@ -30,7 +29,7 @@ interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
           <span class="material-symbols-outlined">support_agent</span>
           <span class="font-label-md text-label-md">Asistente Chifa Wok</span>
         </div>
-        <button (click)="cerrar()" aria-label="Cerrar">
+        <button (click)="estado.cerrar()" aria-label="Cerrar">
           <span class="material-symbols-outlined">close</span>
         </button>
       </header>
@@ -49,7 +48,7 @@ interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
 
         <ul *ngIf="items().length" class="mt-sm border-t border-outline-variant pt-sm space-y-xs">
           <li *ngFor="let it of items()" class="flex justify-between font-label-sm text-label-sm text-on-surface">
-            <span>{{ it.cantidad }}× {{ it.nombre }}</span>
+            <span>{{ it.cantidad }}x {{ it.nombre }}</span>
             <span>S/ {{ it.subtotal | number: '1.2-2' }}</span>
           </li>
           <li class="flex justify-between font-label-md text-label-md text-primary pt-xs border-t border-outline-variant">
@@ -66,9 +65,7 @@ interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
           [class]="speech.escuchando() ? 'bg-error text-on-error pulse-animation' : 'bg-tertiary-container text-on-tertiary'">
           <span class="material-symbols-outlined">{{ speech.escuchando() ? 'stop' : 'mic' }}</span>
         </button>
-        <span class="flex-1 font-body-md text-body-md text-on-surface-variant">
-          {{ estado() }}
-        </span>
+        <span class="flex-1 font-body-md text-body-md text-on-surface-variant">{{ estadoTexto() }}</span>
         <span *ngIf="speech.hablando()" class="material-symbols-outlined text-primary">volume_up</span>
       </footer>
 
@@ -80,30 +77,24 @@ interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
 })
 export class VoiceWidgetComponent {
   readonly speech = inject(SpeechService);
+  readonly estado = inject(VoiceWidgetState);
   private readonly api = inject(VoiceApiService);
 
-  readonly abierto = signal(false);
   readonly procesando = signal(false);
   readonly mensajes = signal<Mensaje[]>([]);
   readonly items = signal<ItemSugerido[]>([]);
   readonly total = signal(0);
   private sesionUuid?: string;
 
-  estado(): string {
-    if (this.speech.escuchando()) return 'Escuchando…';
-    if (this.procesando()) return 'Procesando tu pedido…';
-    if (this.speech.hablando()) return 'Respondiendo…';
+  estadoTexto(): string {
+    if (this.speech.escuchando()) return 'Escuchando...';
+    if (this.procesando()) return 'Procesando tu pedido...';
+    if (this.speech.hablando()) return 'Respondiendo...';
     return 'Toca el microfono para hablar';
   }
 
-  abrir(): void { this.abierto.set(true); }
-  cerrar(): void { this.speech.detener(); this.abierto.set(false); }
-
   toggleMic(): void {
-    if (this.speech.escuchando()) {
-      this.speech.detener();
-      return;
-    }
+    if (this.speech.escuchando()) { this.speech.detener(); return; }
     this.speech.escuchar().subscribe({
       next: (texto) => this.enviar(texto),
       error: (e) => this.push('asistente', e.message),
