@@ -25,6 +25,12 @@ public class VozController {
         return service.interpretar(req);
     }
 
+    @PostMapping("/confirmar")
+    @Operation(summary = "El cliente confirma: crea el cliente por telefono y registra el pedido")
+    public ConfirmarResponse confirmar(@Valid @RequestBody ConfirmarRequest req) {
+        return service.confirmar(req);
+    }
+
     @GetMapping("/sesiones")
     @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Historial de sesiones de voz para el panel administrativo")

@@ -22,10 +22,13 @@ Enviar en las rutas protegidas: `Authorization: Bearer <token>`.
 | GET | `/api/catalogo/destacados` | — | Platos destacados (landing) |
 | GET | `/api/catalogo/platos/{codigo}` | — | Detalle de un plato |
 | POST | `/api/voz/interpretar` | — | **Widget**: transcripción → respuesta del asistente |
+| POST | `/api/voz/confirmar` | — | **Widget**: el cliente confirma → crea cliente (por teléfono) + pedido canal VOZ |
 | GET | `/api/voz/sesiones` | JWT | Historial de sesiones de voz (paginado) |
 | POST | `/api/pedidos` | — | Crea un pedido (desde el widget o la web) |
 | GET | `/api/pedidos` | JWT | Lista de pedidos (filtro `?estado=`) |
 | GET | `/api/pedidos/tablero` | JWT | Pedidos activos (cocina) |
+| GET | `/api/pedidos/cliente/{clienteId}` | — | **"Mis Pedidos"**: pedidos de un cliente (activo + historial) |
+| POST | `/api/pedidos/{id}/repetir` | — | Repite un pedido anterior (mismos platos y cantidades) |
 | GET | `/api/pedidos/{id}` | — | Detalle |
 | PATCH | `/api/pedidos/{id}/estado` | JWT | Cambia el estado (valida transición) |
 | GET | `/api/clientes` | JWT | Lista/búsqueda (`?q=`) paginada |

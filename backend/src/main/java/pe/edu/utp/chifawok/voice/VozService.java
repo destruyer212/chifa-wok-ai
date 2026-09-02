@@ -10,6 +10,14 @@ import pe.edu.utp.chifawok.ai.AiDtos;
 import pe.edu.utp.chifawok.ai.AiDtos.*;
 import pe.edu.utp.chifawok.catalog.CatalogoDtos.PlatoDTO;
 import pe.edu.utp.chifawok.catalog.CatalogoService;
+import pe.edu.utp.chifawok.common.exception.NotFoundException;
+import pe.edu.utp.chifawok.customer.Cliente;
+import pe.edu.utp.chifawok.customer.ClienteService;
+import pe.edu.utp.chifawok.order.Canal;
+import pe.edu.utp.chifawok.order.MetodoPago;
+import pe.edu.utp.chifawok.order.PedidoDtos;
+import pe.edu.utp.chifawok.order.PedidoService;
+import pe.edu.utp.chifawok.order.TipoEntrega;
 import pe.edu.utp.chifawok.voice.VozDtos.*;
 
 import java.util.ArrayList;
@@ -22,6 +30,7 @@ import java.util.UUID;
  *   2. arma el contexto del menu y consulta al microservicio de IA,
  *   3. valida los platos contra el catalogo y calcula totales,
  *   4. persiste la sesion de voz y devuelve el texto para el Text-to-Speech.
+ * Y al confirmar, crea el cliente (por telefono) y el pedido.
  */
 @Service
 @Slf4j
@@ -31,6 +40,8 @@ public class VozService {
     private final AiClient aiClient;
     private final CatalogoService catalogo;
     private final SesionVozRepository sesiones;
+    private final ClienteService clienteService;
+    private final PedidoService pedidoService;
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -89,6 +100,31 @@ public class VozService {
 
         return new VozResponse(sesion.getUuid(), ia.intencion(), ia.respuestaAsistente(),
                 ia.requiereConfirmacion(), items, total, latencia);
+    }
+
+    /** El cliente confirma: se crea/encuentra por telefono y se registra el pedido por canal VOZ. */
+    @Transactional
+    public ConfirmarResponse confirmar(ConfirmarRequest req) {
+        SesionVoz sesion = sesiones.findByUuid(req.sesionUuid())
+                .orElseThrow(() -> new NotFoundException("Sesion de voz", req.sesionUuid()));
+
+        Cliente cliente = clienteService.obtenerOCrearPorTelefono(req.telefono(), req.nombre());
+
+        List<PedidoDtos.ItemRequest> items = req.items().stream()
+                .map(i -> new PedidoDtos.ItemRequest(i.codigoPlato(), i.cantidad(), i.presentacion(), null))
+                .toList();
+
+        var pedido = pedidoService.crear(new PedidoDtos.CrearPedidoRequest(
+                cliente.getId(), Canal.VOZ,
+                req.tipoEntrega() != null ? req.tipoEntrega() : TipoEntrega.RECOJO,
+                req.direccion(), MetodoPago.POR_DEFINIR, sesion.getId(), null, items));
+
+        sesion.setClienteId(cliente.getId());
+        sesion.setIntencion("CONFIRMAR");
+        sesion.setExito(true);
+        sesiones.save(sesion);
+
+        return new ConfirmarResponse(pedido.codigo(), cliente.getId(), pedido.total());
     }
 
     private String serializar(Object o) {

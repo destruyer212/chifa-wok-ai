@@ -8,10 +8,18 @@ import { Pedido, EstadoPedido } from './models';
 export class OrderService {
   constructor(private http: HttpClient) {}
 
+  private base = `${environment.apiBaseUrl}/pedidos`;
+
   tablero(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(`${environment.apiBaseUrl}/pedidos/tablero`);
+    return this.http.get<Pedido[]>(`${this.base}/tablero`);
   }
   cambiarEstado(id: number, estado: EstadoPedido): Observable<Pedido> {
-    return this.http.patch<Pedido>(`${environment.apiBaseUrl}/pedidos/${id}/estado`, { estado });
+    return this.http.patch<Pedido>(`${this.base}/${id}/estado`, { estado });
+  }
+  misPedidos(clienteId: number): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(`${this.base}/cliente/${clienteId}`);
+  }
+  repetir(pedidoId: number): Observable<Pedido> {
+    return this.http.post<Pedido>(`${this.base}/${pedidoId}/repetir`, {});
   }
 }

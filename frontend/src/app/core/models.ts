@@ -69,3 +69,9 @@ export interface DashboardDTO {
   ventas7dias: { fecha: string; numPedidos: number; totalVendido: number }[];
   topPlatos: { nombre: string; unidades: number; ingresos: number }[];
 }
+
+export interface ConfirmarResponse {
+  pedidoCodigo: string;
+  clienteId: number;
+  total: number;
+}

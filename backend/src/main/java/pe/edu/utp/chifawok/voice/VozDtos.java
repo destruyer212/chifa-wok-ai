@@ -1,7 +1,11 @@
 package pe.edu.utp.chifawok.voice;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import pe.edu.utp.chifawok.order.TipoEntrega;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,4 +31,17 @@ public final class VozDtos {
             List<ItemSugerido> items,
             double total,
             int latenciaMs) {}
+
+    // ---- confirmacion del pedido ----
+    public record ItemConfirmar(@NotBlank String codigoPlato, int cantidad, String presentacion) {}
+
+    public record ConfirmarRequest(
+            @NotNull UUID sesionUuid,
+            @NotBlank String telefono,
+            String nombre,
+            TipoEntrega tipoEntrega,
+            String direccion,
+            @NotEmpty List<ItemConfirmar> items) {}
+
+    public record ConfirmarResponse(String pedidoCodigo, Long clienteId, BigDecimal total) {}
 }

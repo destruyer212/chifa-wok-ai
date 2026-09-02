@@ -15,6 +15,9 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     Page<Pedido> findByEstadoOrderByCreadoEnDesc(EstadoPedido estado, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"cliente", "items", "items.plato"})
+    List<Pedido> findByClienteIdOrderByCreadoEnDesc(Long clienteId);
+
     List<Pedido> findByEstadoIn(List<EstadoPedido> estados);
 
     long countByEstado(EstadoPedido estado);

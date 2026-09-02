@@ -4,6 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     loadComponent: () =>
       import('./features/landing/landing.component').then((m) => m.LandingComponent),
   },
@@ -12,6 +13,27 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/login.component').then((m) => m.LoginComponent),
   },
+
+  // ---- Zona del cliente (sidebar) ----
+  {
+    path: '',
+    loadComponent: () =>
+      import('./features/account/account-shell.component').then((m) => m.AccountShellComponent),
+    children: [
+      {
+        path: 'carta',
+        loadComponent: () =>
+          import('./features/account/menu.component').then((m) => m.MenuComponent),
+      },
+      {
+        path: 'mis-pedidos',
+        loadComponent: () =>
+          import('./features/account/mis-pedidos.component').then((m) => m.MisPedidosComponent),
+      },
+    ],
+  },
+
+  // ---- Panel administrativo (JWT) ----
   {
     path: 'admin',
     canActivate: [authGuard],
@@ -36,5 +58,6 @@ export const routes: Routes = [
       },
     ],
   },
+
   { path: '**', redirectTo: '' },
 ];

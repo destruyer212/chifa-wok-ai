@@ -29,7 +29,8 @@ const IMG_POR_CODIGO: Record<string, string> = {
       <div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto h-20">
         <a class="text-headline-md font-headline-md font-bold text-primary" href="#inicio">Chifa Wok</a>
         <div class="hidden md:flex items-center gap-gutter">
-          <a href="#menu" class="text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors">Carta</a>
+          <a routerLink="/carta" class="text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors">Carta</a>
+          <a routerLink="/mis-pedidos" class="text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors">Mis Pedidos</a>
           <a href="#about" class="text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors">Nosotros</a>
           <a routerLink="/ingresar" class="text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors">Panel</a>
         </div>
@@ -71,7 +72,7 @@ const IMG_POR_CODIGO: Record<string, string> = {
                 <span class="material-symbols-outlined relative z-10">settings_voice</span>
                 <span class="relative z-10 font-bold">Probar Asistente de Voz</span>
               </button>
-              <a href="#menu"
+              <a routerLink="/carta"
                  class="bg-surface text-primary border border-primary font-label-md text-label-md px-lg py-md rounded-full hover:bg-surface-container-low transition-colors font-bold text-center">
                 Ver Menu Completo
               </a>

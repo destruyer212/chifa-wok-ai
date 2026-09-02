@@ -51,8 +51,9 @@ chifa-wok-ai/
     └── src/app/
         ├── core/              models.ts, *.service.ts, interceptors/, guards/
         └── features/
-            ├── landing/       Página pública (carta destacada)
-            ├── voice-widget/  speech.service.ts (Web Speech API) + voice-widget.component.ts
+            ├── landing/       Página pública (hero + carta destacada + nosotros)
+            ├── voice-widget/  speech.service.ts (Web Speech API) + voice-widget.component.ts (STT/TTS + confirmar pedido)
+            ├── account/       account-shell (sidebar) + menu.component (carta completa) + mis-pedidos.component (tracker + historial)
             ├── auth/          login.component.ts
             └── admin/         admin-layout, dashboard, orders, voice-sessions
 ```

@@ -105,6 +105,24 @@ public class PedidoService {
         return pedidos.findByEstadoIn(List.copyOf(ACTIVOS)).stream().map(PedidoDTO::from).toList();
     }
 
+    /** Pedidos de un cliente (para la pantalla "Mis Pedidos"). */
+    @Transactional(readOnly = true)
+    public List<PedidoDTO> porCliente(Long clienteId) {
+        return pedidos.findByClienteIdOrderByCreadoEnDesc(clienteId).stream().map(PedidoDTO::from).toList();
+    }
+
+    /** Repite un pedido anterior: crea uno nuevo con los mismos platos y cantidades. */
+    public PedidoDTO repetir(Long pedidoId) {
+        Pedido base = pedidos.findWithItemsById(pedidoId)
+                .orElseThrow(() -> new NotFoundException("Pedido", pedidoId));
+        List<ItemRequest> items = base.getItems().stream()
+                .map(i -> new ItemRequest(i.getPlato().getCodigo(), i.getCantidad(), null, i.getNotas()))
+                .toList();
+        return crear(new CrearPedidoRequest(
+                base.getCliente().getId(), base.getCanal(), base.getTipoEntrega(),
+                base.getDireccionEntrega(), base.getMetodoPago(), null, base.getNotas(), items));
+    }
+
     // ---- helpers ----
     private BigDecimal precioSegunPresentacion(Plato plato, String presentacion) {
         if (presentacion == null || presentacion.isBlank()) return plato.getPrecio();

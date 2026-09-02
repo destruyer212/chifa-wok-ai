@@ -41,6 +41,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/voz/**").permitAll()            // widget del cliente (anonimo)
                 .requestMatchers(HttpMethod.GET, "/api/catalogo/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/pedidos", "/api/pedidos/*/repetir").permitAll() // el cliente crea/repite su pedido
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/cliente/**").permitAll() // "Mis Pedidos"
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/*").permitAll()          // detalle tras el pedido
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated())

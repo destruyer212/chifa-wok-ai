@@ -34,6 +34,13 @@ public class PedidoController {
     @PreAuthorize("isAuthenticated()")
     public List<PedidoDTO> tablero() { return service.tablero(); }
 
+    @GetMapping("/cliente/{clienteId}")
+    public List<PedidoDTO> porCliente(@PathVariable Long clienteId) { return service.porCliente(clienteId); }
+
+    @PostMapping("/{id}/repetir")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PedidoDTO repetir(@PathVariable Long id) { return service.repetir(id); }
+
     @GetMapping("/{id}")
     public PedidoDTO obtener(@PathVariable Long id) { return service.obtener(id); }
 

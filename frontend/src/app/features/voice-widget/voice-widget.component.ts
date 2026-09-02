@@ -1,8 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { SpeechService } from './speech.service';
 import { VoiceWidgetState } from './voice-widget.state';
 import { VoiceApiService } from '../../core/voice-api.service';
+import { ClienteLocalService } from '../../core/cliente-local.service';
 import { ItemSugerido } from '../../core/models';
 
 interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
@@ -10,7 +13,7 @@ interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
 @Component({
   selector: 'cw-voice-widget',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   template: `
     <button
       *ngIf="!estado.abierto()"
@@ -55,6 +58,22 @@ interface Mensaje { rol: 'usuario' | 'asistente'; texto: string; }
             <span>Total</span><span>S/ {{ total() | number: '1.2-2' }}</span>
           </li>
         </ul>
+
+        <!-- Confirmacion -->
+        <div *ngIf="items().length && !confirmado()" class="mt-sm space-y-xs">
+          <input [(ngModel)]="telefono" name="tel" inputmode="tel" placeholder="Tu numero de celular"
+                 class="w-full rounded-lg border border-outline px-sm py-xs font-body-md text-body-md" />
+          <button (click)="confirmar()" [disabled]="telefono.length < 6 || confirmando()"
+                  class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-lg font-bold disabled:opacity-50">
+            {{ confirmando() ? 'Registrando...' : 'Confirmar pedido' }}
+          </button>
+        </div>
+
+        <div *ngIf="confirmado() as cod" class="mt-sm bg-surface-container-low rounded-lg p-sm text-center">
+          <p class="font-label-md text-label-md text-primary font-bold">Pedido {{ cod }} registrado</p>
+          <a routerLink="/mis-pedidos" (click)="estado.cerrar()"
+             class="font-label-sm text-label-sm text-tertiary underline">Ver el seguimiento</a>
+        </div>
       </div>
 
       <footer class="p-md bg-surface-container flex items-center gap-sm">
@@ -79,11 +98,15 @@ export class VoiceWidgetComponent {
   readonly speech = inject(SpeechService);
   readonly estado = inject(VoiceWidgetState);
   private readonly api = inject(VoiceApiService);
+  private readonly clienteLocal = inject(ClienteLocalService);
 
   readonly procesando = signal(false);
+  readonly confirmando = signal(false);
+  readonly confirmado = signal<string | null>(null);
   readonly mensajes = signal<Mensaje[]>([]);
   readonly items = signal<ItemSugerido[]>([]);
   readonly total = signal(0);
+  telefono = '';
   private sesionUuid?: string;
 
   estadoTexto(): string {
@@ -104,6 +127,7 @@ export class VoiceWidgetComponent {
   private enviar(transcripcion: string): void {
     this.push('usuario', transcripcion);
     this.procesando.set(true);
+    this.confirmado.set(null);
     this.api.interpretar(transcripcion, this.sesionUuid).subscribe({
       next: (r) => {
         this.sesionUuid = r.sesionUuid;
@@ -116,6 +140,25 @@ export class VoiceWidgetComponent {
       error: () => {
         this.push('asistente', 'Disculpa, tuve un problema. Intenta de nuevo.');
         this.procesando.set(false);
+      },
+    });
+  }
+
+  confirmar(): void {
+    if (!this.sesionUuid || !this.items().length) return;
+    this.confirmando.set(true);
+    this.api.confirmar(this.sesionUuid, this.telefono, this.items()).subscribe({
+      next: (r) => {
+        this.clienteLocal.set(r.clienteId);
+        this.confirmado.set(r.pedidoCodigo);
+        this.confirmando.set(false);
+        const msg = `Listo. Tu pedido ${r.pedidoCodigo} quedo registrado. Total ${r.total.toFixed(2)} soles.`;
+        this.push('asistente', msg);
+        this.speech.hablar(msg);
+      },
+      error: () => {
+        this.confirmando.set(false);
+        this.push('asistente', 'No pude registrar el pedido. Revisa tu numero e intenta otra vez.');
       },
     });
   }
