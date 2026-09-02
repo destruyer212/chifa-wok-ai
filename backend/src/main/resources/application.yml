@@ -2,7 +2,7 @@ spring:
   application:
     name: chifawok-backend
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/chifawok}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/chifawok}
     username: ${SPRING_DATASOURCE_USERNAME:chifawok}
     password: ${SPRING_DATASOURCE_PASSWORD:chifawok}
   jpa:
