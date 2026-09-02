@@ -12,6 +12,7 @@
 | 07 | [Sistema de diseño](07-SISTEMA-DE-DISENO.md) | Paleta Material 3 "Andean Dragon", tipografía, tokens Tailwind. |
 | 08 | [Pendientes del informe](08-PENDIENTES-INFORME.md) | Plantillas de RF, RNF, modelo ER y casos de prueba para completar el Word. |
 | 09 | [Puesta en marcha](09-PUESTA-EN-MARCHA.md) | Cómo levantar todo (Docker y local). |
+| 10 | [Pantallas y navegación](10-PANTALLAS.md) | Mapa de rutas del frontend y qué hace cada vista. |
 
 ## Fuente de verdad
 
