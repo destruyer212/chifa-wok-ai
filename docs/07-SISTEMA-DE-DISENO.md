@@ -45,10 +45,25 @@ Escala: `display-lg` 48/56 · `headline-lg` 32/40 · `headline-md` 24/32 ·
 **Material Symbols Outlined** (Google Fonts, importado en `styles.css`).
 Uso: `<span class="material-symbols-outlined">mic</span>`.
 
-## Utilidades propias
+## Utilidades propias (`src/styles.css`)
 
 - `.glass-effect` — panel translúcido con `backdrop-filter: blur(12px)`.
 - `.pulse-animation` — halo pulsante (FAB del micrófono, estado "escuchando").
+- `.material-symbols-outlined.fill-icon` — versión rellena del ícono (`'FILL' 1`);
+  se aplica a la sección activa del sidebar admin y a los íconos de los KPIs.
+
+## Patrones de componente
+
+| Patrón | Dónde | Cómo |
+|--------|-------|------|
+| Input con ícono | login | `<span class="material-symbols-outlined absolute left-sm …">` + `input` con `pl-11` |
+| Mostrar/ocultar contraseña | login | `signal verPass`; `[type]="verPass() ? 'text' : 'password'"` + botón `visibility` / `visibility_off` |
+| Foco accesible | inputs | `focus:border-primary focus:ring-2 focus:ring-primary/20` |
+| Estado de carga | botones, listas | botón: ícono `progress_activity` + `animate-spin`; listas: bloques `animate-pulse` (skeletons) |
+| Chip de estado | pedidos, sesiones de voz, tracker | `rounded-full px-sm py-xs` con par `bg-*-container` / `text-on-*-container` |
+| Tablero por columnas | `/admin/pedidos` | `grid xl:grid-cols-4`, una `<section>` por estado |
+| Status tracker | `/mis-pedidos` | línea de progreso `bg-tertiary-container` + 4 nodos; el activo lleva `ring-4 ring-tertiary-fixed` |
+| Modal | widget de voz | `fixed inset-0 bg-on-background/40` + tarjeta `max-w-lg` centrada; cerrar por *backdrop* |
 
 ## Modo oscuro
 
