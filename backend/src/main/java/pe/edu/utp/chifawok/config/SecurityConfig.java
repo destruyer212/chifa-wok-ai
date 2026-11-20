@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/pedidos", "/api/pedidos/*/repetir").permitAll() // el cliente crea/repite su pedido
                 .requestMatchers(HttpMethod.GET, "/api/pedidos/cliente/**").permitAll() // "Mis Pedidos"
                 .requestMatchers(HttpMethod.GET, "/api/pedidos/*").permitAll()          // detalle tras el pedido
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/v3/api-docs", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
