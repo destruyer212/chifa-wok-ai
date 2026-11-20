@@ -11,12 +11,15 @@ const HERO_BG =
 const ABOUT_BG =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuCVc4XKSUWJHX1DQdr-wkGvKxCzpcEsXrHgJnIRK8x2emLCkCl7XcYvtb1IHflTz82M4I9bP8JhhYojaJmGbt5-VFJvOOycK_PqQ6LuJO3CxMOLe4BOi5V0Yx7PhJnBCRAYLNNqbKh5AJjawHOe3wGfM0Z1Sc6vaz18fhSGDyRPL9gj1degCpbGypHvjjlrE1TOretI3-gEllGEm4AOmrUbVwkopbn_CyktgDv3aTrOiDPNmpSxvFzUiQ';
 const IMG_POR_CODIGO: Record<string, string> = {
-  'CHF-001':
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuDLP7gwhETnp5yMrpOKYeIvy4ScmAhJLGJ39PsQothoMI1z-4_YpCki2e106wwH8yIP8hFoT5-0F0K5myZ2YSc03fUG2OKQ3VIiPrk-uTLw5L8YmdHYmBdS2pidBh45IFh4Ove5Pt5DonlizJ5ZMIHchanHat0kwqnasGBduaf6E5dq9NNZRtjR-zeJuoovLsvYvDqkt5kA4KUsR15wB5wyLmoNwDGfvhDJdydolANZuxM6-SGRwziLHg',
-  'CMB-002':
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBTwVRf2SjN32f_Jt0_fmHp3NrFAUgnMZcUB9VaPaalJv3I3R36f9joJcnAkvScVZ8A5J88gPz3IjhlfKgx7UdksLMNObq9U8PU4dEme7RU9Gntj0W3iWgu74fjp7t43SBC4cEtN1zO0_0J65qAr4qqJCiwwbTpilPJyFiedohQgFJm0NyjYi5deoTUl8A-1TZHFe6mieCWjfInAOjHi_1wVvzsOQxeW7vcjK5jSh0ld6MPvT00VVCuNQ',
-  'CMB-001':
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuCdE8ahyGGBGz4vRvLdJTlm1YKV6HOWDWouf3EmtIdU9Mtb1zbnWN8mieyd_VAikMGJeoE1y6HsXsF1tF9OnD3nGOoZqmqFPdubFQk-VnSzFru47sLU6IDUFmJ4s6Xyulr7cavSWHDsOS0kq5dbhGYLjhtydMoUSJsRGkv9of-mYX6zPbYSTfzzFup5p1AFSJyNDt8IvYsyvik-8M_ppQWIeA31GOZQifJD7HGQLwjY-hlr8eWjApR4Gg',
+  'CHF-001': '/assets/images/platos/chaufa-especial.jpg',
+  'CHF-002': '/assets/images/platos/chaufa-pollo.jpg',
+  'TLL-001': '/assets/images/platos/tallarin-saltado.jpg',
+  'CMB-001': '/assets/images/platos/aeropuerto.jpg',
+  'CMB-002': '/assets/images/platos/pollo-tipakay.jpg',
+  'SOP-001': '/assets/images/platos/sopa-wantan.jpg',
+  'SOP-002': '/assets/images/platos/wantan-frito.jpg',
+  'BEB-001': '/assets/images/platos/inka-kola.jpg',
+  'BEB-002': '/assets/images/platos/chicha-morada.jpg',
 };
 
 @Component({

@@ -23,6 +23,8 @@ body { @apply bg-background text-on-background font-body-md antialiased; margin:
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 .pulse-animation { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+.icon-btn { @apply inline-flex items-center justify-center w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors; }
+.field { @apply block w-full mt-1 rounded-lg border border-outline bg-surface-container-lowest px-sm py-sm; }
 @keyframes pulse-ring {
   0%   { box-shadow: 0 0 0 0 rgba(7, 112, 204, 0.7); }
   70%  { box-shadow: 0 0 0 15px rgba(7, 112, 204, 0); }

@@ -4,8 +4,19 @@ import { CatalogService } from '../../core/catalog.service';
 import { CategoriaConPlatos, Plato } from '../../core/models';
 import { VoiceWidgetState } from '../voice-widget/voice-widget.state';
 
-const IMG_FALLBACK =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBXcYkapB0RhLU731ZyVOd_ACeRQvOWc3LnBGIvFMQXtE93VjDG1RJsAW8N2B8pI-d_EdelRiOhZcIakxiwXkzxfL9e5MDc-CW5q3Ooi6DnJq8KD90BGRks7784O3o_wPwz8zGbgb6eN63KlVOrI7jtF4T3HgMHJ7vtVb3dCoEN4z9-cgd-mlfzBxeYvAPhWnh48T4U4f1cJ4coHlqpkFOSeu7A6PUYenCZDMM604olLbQuJquIqq9NCQ';
+const IMG_POR_CODIGO: Record<string, string> = {
+  'CHF-001': '/assets/images/platos/chaufa-especial.jpg',
+  'CHF-002': '/assets/images/platos/chaufa-pollo.jpg',
+  'TLL-001': '/assets/images/platos/tallarin-saltado.jpg',
+  'CMB-001': '/assets/images/platos/aeropuerto.jpg',
+  'CMB-002': '/assets/images/platos/pollo-tipakay.jpg',
+  'SOP-001': '/assets/images/platos/sopa-wantan.jpg',
+  'SOP-002': '/assets/images/platos/wantan-frito.jpg',
+  'BEB-001': '/assets/images/platos/inka-kola.jpg',
+  'BEB-002': '/assets/images/platos/chicha-morada.jpg',
+};
+
+const IMG_FALLBACK = '/assets/images/platos/chaufa-especial.jpg';
 
 @Component({
   selector: 'cw-menu',
@@ -86,6 +97,7 @@ export class MenuComponent {
   }
 
   bg(p: Plato): string {
-    return `url('${p.imagenUrl || IMG_FALLBACK}')`;
+    const src = p.imagenUrl || IMG_POR_CODIGO[p.codigo] || IMG_FALLBACK;
+    return `url('${src}')`;
   }
 }

@@ -15,15 +15,23 @@ const COLUMNAS: { estado: EstadoPedido; label: string; icon: string }[] = [
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="flex items-center justify-between mb-md">
-      <p class="font-body-md text-body-md text-on-surface-variant">{{ pedidos().length }} pedidos activos</p>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm mb-md">
+      <div><p class="font-label-sm text-primary font-bold">Panel operativo · Chifa Wok</p><p class="font-body-md text-body-md text-on-surface-variant">{{ pedidos().length }} pedidos activos · cocina en tiempo real</p></div>
+      <div class="flex gap-sm"><span class="inline-flex items-center gap-xs px-sm py-xs rounded-full bg-secondary-container text-on-secondary-container font-label-sm"><span class="w-2 h-2 rounded-full bg-green-600"></span>Recibiendo pedidos</span>
       <button (click)="cargar()" class="flex items-center gap-xs font-label-md text-label-md text-primary hover:underline">
         <span class="material-symbols-outlined text-[18px]">refresh</span> Actualizar
-      </button>
+      </button></div>
+    </div>
+
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-sm mb-md">
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md"><p class="font-label-sm text-on-surface-variant">Ventas del dia</p><p class="font-headline-md font-bold">S/ {{ totalVentas() | number:'1.2-2' }}</p><p class="font-label-sm text-secondary">+14% vs ayer</p></div>
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md"><p class="font-label-sm text-on-surface-variant">Pedidos totales</p><p class="font-headline-md font-bold">{{ pedidos().length }} ordenes</p><p class="font-label-sm text-tertiary">{{ vozCount() }} via Voice AI</p></div>
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md"><p class="font-label-sm text-on-surface-variant">Tiempo promedio Wok</p><p class="font-headline-md font-bold">8.5 min</p><p class="font-label-sm text-secondary">Excelente</p></div>
+      <div class="bg-tertiary-fixed rounded-xl border border-tertiary-fixed-dim p-md"><p class="font-label-sm text-on-tertiary-fixed-variant">Eficiencia Voice AI</p><p class="font-headline-md font-bold text-on-tertiary-fixed-variant">98.2%</p><p class="font-label-sm text-on-tertiary-fixed-variant">Confirmados sin intervención</p></div>
     </div>
 
     <div class="grid gap-md md:grid-cols-2 xl:grid-cols-4">
-      <section *ngFor="let col of columnas" class="bg-surface-container rounded-xl p-sm min-h-[120px]">
+      <section *ngFor="let col of columnas" class="bg-surface-container rounded-xl p-sm min-h-[120px] border-t-4" [class]="col.estado === 'PENDIENTE' ? 'border-secondary' : col.estado === 'EN_PREPARACION' ? 'border-primary' : col.estado === 'LISTO' ? 'border-green-600' : 'border-tertiary'">
         <header class="flex items-center gap-xs px-xs py-sm">
           <span class="material-symbols-outlined text-[18px] text-on-surface-variant">{{ col.icon }}</span>
           <span class="font-label-md text-label-md font-bold text-on-surface">{{ col.label }}</span>
@@ -39,11 +47,11 @@ const COLUMNAS: { estado: EstadoPedido; label: string; icon: string }[] = [
               <p class="font-label-md text-label-md font-bold text-on-surface">{{ p.codigo }}</p>
               <span class="font-label-sm text-label-sm text-on-surface-variant">{{ p.creadoEn | date: 'HH:mm' }}</span>
             </div>
-            <p class="font-label-sm text-label-sm text-on-surface-variant mb-xs">{{ p.clienteNombre }} · {{ p.canal }}</p>
+            <p class="font-label-sm text-label-sm text-on-surface-variant mb-xs">{{ p.clienteNombre }} · {{ p.tipoEntrega }} · {{ p.canal }}</p>
             <ul class="font-body-md text-[14px] text-on-surface mb-xs">
               <li *ngFor="let it of p.items">{{ it.cantidad }}x {{ it.nombrePlato }}</li>
             </ul>
-            <p class="font-label-md text-label-md text-primary font-bold mb-sm">S/ {{ p.total | number: '1.2-2' }}</p>
+            <div class="flex justify-between items-center mb-sm"><p class="font-label-md text-label-md text-primary font-bold">S/ {{ p.total | number: '1.2-2' }}</p><span class="font-label-sm text-on-surface-variant">{{ p.metodoPago }}</span></div>
             <div class="flex flex-wrap gap-xs">
               <button *ngFor="let e of siguientes(p.estado)" (click)="mover(p, e)"
                       class="font-label-sm text-label-sm px-sm py-xs rounded-full transition-colors"
@@ -71,6 +79,8 @@ export class OrdersComponent {
   private readonly service = inject(OrderService);
   readonly pedidos = signal<Pedido[]>([]);
   readonly columnas = COLUMNAS;
+  readonly totalVentas = computed(() => this.pedidos().reduce((sum, p) => sum + p.total, 0));
+  readonly vozCount = computed(() => this.pedidos().filter(p => p.canal === 'VOZ').length);
 
   private readonly flujo: EstadoPedido[] = [
     'PENDIENTE', 'CONFIRMADO', 'EN_PREPARACION', 'LISTO', 'EN_CAMINO', 'ENTREGADO',

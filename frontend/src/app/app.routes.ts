@@ -52,6 +52,16 @@ export const routes: Routes = [
           import('./features/admin/orders.component').then((m) => m.OrdersComponent),
       },
       {
+        path: 'productos',
+        loadComponent: () =>
+          import('./features/admin/products.component').then((m) => m.ProductsComponent),
+      },
+      {
+        path: 'clientes',
+        loadComponent: () =>
+          import('./features/admin/clients.component').then((m) => m.ClientsComponent),
+      },
+      {
         path: 'sesiones-voz',
         loadComponent: () =>
           import('./features/admin/voice-sessions.component').then((m) => m.VoiceSessionsComponent),

@@ -19,25 +19,25 @@ INSERT INTO categorias (nombre, descripcion, icono, orden) VALUES
 INSERT INTO platos (categoria_id, codigo, nombre, descripcion, precio, destacado, imagen_url, tiempo_preparacion_min) VALUES
     ((SELECT id FROM categorias WHERE nombre='Chaufas'),    'CHF-001', 'Arroz Chaufa Especial',
         'Arroz frito al wok con chancho asado, pollo, langostinos y cebollita china fresca.', 32.00, TRUE,
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDLP7gwhETnp5yMrpOKYeIvy4ScmAhJLGJ39PsQothoMI1z-4_YpCki2e106wwH8yIP8hFoT5-0F0K5myZ2YSc03fUG2OKQ3VIiPrk-uTLw5L8YmdHYmBdS2pidBh45IFh4Ove5Pt5DonlizJ5ZMIHchanHat0kwqnasGBduaf6E5dq9NNZRtjR-zeJuoovLsvYvDqkt5kA4KUsR15wB5wyLmoNwDGfvhDJdydolANZuxM6-SGRwziLHg', 15),
+        '/assets/images/platos/chaufa-especial.jpg', 15),
     ((SELECT id FROM categorias WHERE nombre='Chaufas'),    'CHF-002', 'Chaufa de Pollo',
-        'Arroz frito al wok con trozos de pollo y verduras.', 22.00, FALSE, NULL, 12),
+        'Arroz frito al wok con trozos de pollo y verduras.', 22.00, FALSE, '/assets/images/platos/chaufa-pollo.jpg', 12),
     ((SELECT id FROM categorias WHERE nombre='Tallarines'), 'TLL-001', 'Tallarin Saltado de Pollo',
-        'Tallarines salteados con pollo, verduras y sillao.', 24.00, FALSE, NULL, 14),
+        'Tallarines salteados con pollo, verduras y sillao.', 24.00, FALSE, '/assets/images/platos/tallarin-saltado.jpg', 14),
     ((SELECT id FROM categorias WHERE nombre='Combinados'), 'CMB-001', 'Aeropuerto Familiar',
         'La fusion definitiva: arroz frito, fideos crujientes, carnes mixtas y glaseado de soja para compartir.', 55.00, TRUE,
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCdE8ahyGGBGz4vRvLdJTlm1YKV6HOWDWouf3EmtIdU9Mtb1zbnWN8mieyd_VAikMGJeoE1y6HsXsF1tF9OnD3nGOoZqmqFPdubFQk-VnSzFru47sLU6IDUFmJ4s6Xyulr7cavSWHDsOS0kq5dbhGYLjhtydMoUSJsRGkv9of-mYX6zPbYSTfzzFup5p1AFSJyNDt8IvYsyvik-8M_ppQWIeA31GOZQifJD7HGQLwjY-hlr8eWjApR4Gg', 20),
+        '/assets/images/platos/aeropuerto.jpg', 20),
     ((SELECT id FROM categorias WHERE nombre='Combinados'), 'CMB-002', 'Pollo Tipa Kay',
         'Pechuga de pollo dorada crujiente banada en salsa agridulce secreta de tamarindo.', 35.00, TRUE,
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBTwVRf2SjN32f_Jt0_fmHp3NrFAUgnMZcUB9VaPaalJv3I3R36f9joJcnAkvScVZ8A5J88gPz3IjhlfKgx7UdksLMNObq9U8PU4dEme7RU9Gntj0W3iWgu74fjp7t43SBC4cEtN1zO0_0J65qAr4qqJCiwwbTpilPJyFiedohQgFJm0NyjYi5deoTUl8A-1TZHFe6mieCWjfInAOjHi_1wVvzsOQxeW7vcjK5jSh0ld6MPvT00VVCuNQ', 16),
+        '/assets/images/platos/pollo-tipakay.jpg', 16),
     ((SELECT id FROM categorias WHERE nombre='Sopas'),      'SOP-001', 'Sopa Wantan',
-        'Caldo de la casa con wantanes rellenos, verduras y trozos de pollo.', 18.00, FALSE, NULL, 10),
+        'Caldo de la casa con wantanes rellenos, verduras y trozos de pollo.', 18.00, FALSE, '/assets/images/platos/sopa-wantan.jpg', 10),
     ((SELECT id FROM categorias WHERE nombre='Sopas'),      'SOP-002', 'Wantan Frito (12 u.)',
-        'Wantanes fritos crocantes con salsa tamarindo.', 15.00, FALSE, NULL, 8),
+        'Wantanes fritos crocantes con salsa tamarindo.', 15.00, FALSE, '/assets/images/platos/wantan-frito.jpg', 8),
     ((SELECT id FROM categorias WHERE nombre='Bebidas'),    'BEB-001', 'Inka Kola 1.5 L',
-        'Gaseosa Inka Kola de litro y medio.', 9.00, FALSE, NULL, 1),
+        'Gaseosa Inka Kola de litro y medio.', 9.00, FALSE, '/assets/images/platos/inka-kola.jpg', 1),
     ((SELECT id FROM categorias WHERE nombre='Bebidas'),    'BEB-002', 'Chicha Morada Jarra 1 L',
-        'Chicha morada de la casa, jarra de 1 litro.', 12.00, FALSE, NULL, 2);
+        'Chicha morada de la casa, jarra de 1 litro.', 12.00, FALSE, '/assets/images/platos/chicha-morada.jpg', 2);
 
 -- Presentaciones para el chaufa especial y el tallarin
 INSERT INTO plato_presentaciones (plato_id, nombre, precio, predeterminada) VALUES

@@ -84,6 +84,8 @@ export class AdminLayoutComponent {
   readonly links = [
     { path: 'dashboard', label: 'Dashboard', icon: 'monitoring' },
     { path: 'pedidos', label: 'Pedidos', icon: 'receipt_long' },
+    { path: 'productos', label: 'Productos', icon: 'restaurant_menu' },
+    { path: 'clientes', label: 'Clientes', icon: 'groups' },
     { path: 'sesiones-voz', label: 'Sesiones de voz', icon: 'graphic_eq' },
   ];
 
